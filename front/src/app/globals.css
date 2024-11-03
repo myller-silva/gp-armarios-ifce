@@ -1,0 +1,17 @@
+/* Estilos para o tema claro */
+:root {
+  --background-color: white;
+  --text-color: black;
+}
+
+/* Estilos para o tema escuro */
+.dark-theme {
+  --background-color: black;
+  --text-color: white;
+}
+
+/* Aplicando as variáveis CSS */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
