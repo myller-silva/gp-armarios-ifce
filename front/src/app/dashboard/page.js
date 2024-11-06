@@ -32,7 +32,6 @@ export default function Dashboard() {
       <Navbar />
       <h1>Dashboard</h1>
       <p>Olá, {userInfo.username}!</p>
-      
     </div>
   );
 }

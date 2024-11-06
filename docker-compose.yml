@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/usr/src/app
+      - ./front:/usr/src/app
     depends_on:
       - api
 
@@ -24,7 +24,10 @@ services:
   db:
     image: nouchka/sqlite3
     volumes:
-      - ./backend/db.sqlite3:/data/db.sqlite3
+      - ./backend/instance/site.db:/data/db.sqlite3  # Mapeia o banco de dados SQLite
+    environment:
+      SQLITE_DATABASE: /data/db.sqlite3  # Caminho correto do banco no contêiner
 
-volumes:
-  db_data:
+
+# volumes:
+#   db_data:

@@ -33,16 +33,13 @@ const Navbar = () => {
 
   // Função para fazer logout
   const handleLogout = () => {
-    // Remova o token do localStorage ou qualquer outra informação do usuário
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
     ClearLocalStorage();
     router.push('/login'); // Redireciona para a página de login
   };
 
   return (
     <nav>
-      <h1>Meu App</h1>
+      {/* <h1>Meu App</h1> */}
       <button onClick={toggleTheme}>
         {isDarkTheme ? 'Tema Claro' : 'Tema Escuro'}
       </button>
