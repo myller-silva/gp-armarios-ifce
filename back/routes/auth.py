@@ -1,73 +1,68 @@
 import os
-from flask import Blueprint, session, request, jsonify, redirect, url_for, render_template
-import google_auth_oauthlib.flow
-import json
+import pathlib
 import requests
+from flask import Blueprint, session, redirect, request, abort, current_app as app
+from google.oauth2 import id_token
+from google_auth_oauthlib.flow import Flow
+from pip._vendor import cachecontrol
+import google.auth.transport.requests
 
-auth_bp = Blueprint('auth', __name__, template_folder='templates')
+auth_bp = Blueprint("auth", __name__)
 
-def create_oauth_flow():
-    google_oauth_secrets = os.getenv("GOOGLE_OAUTH_SECRETS")
-    if google_oauth_secrets:
-        google_oauth_secrets = json.loads(google_oauth_secrets)
-    oauth_flow = google_auth_oauthlib.flow.Flow.from_client_config(
-        google_oauth_secrets,
-        scopes=[
-            "https://www.googleapis.com/auth/userinfo.email",
-            "openid",
-            "https://www.googleapis.com/auth/userinfo.profile",
-        ]
+# Define ambiente de transporte inseguro para testes
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+# Função para criar o fluxo OAuth2 do Google
+def create_flow():
+    return Flow.from_client_secrets_file(
+        client_secrets_file=app.config["CLIENT_SECRETS_FILE"],
+        scopes=["https://www.googleapis.com/auth/userinfo.profile",
+                "https://www.googleapis.com/auth/userinfo.email", "openid"],
+        redirect_uri="http://127.0.0.1:5000/callback"
     )
-    return oauth_flow
 
+# Decorador para verificar login
+def login_is_required(function):
+    def wrapper(*args, **kwargs):
+        if "google_id" not in session:
+            return abort(401)  # Authorization required
+        return function(*args, **kwargs)
+    return wrapper
 
-@auth_bp.route('/signin')
-def signin():
-    oauth_flow = create_oauth_flow()
-    authorization_url, state = oauth_flow.authorization_url(prompt='consent')
-    session['state'] = state
-    return jsonify({
-        "authorization_url": authorization_url
-    })
+# Rota para login
+@auth_bp.route("/login")
+def login():
+    flow = create_flow()
+    authorization_url, state = flow.authorization_url()
+    session["state"] = state
+    return redirect(authorization_url)
 
-@auth_bp.route('/token', methods=['POST'])
-def get_token():
-    code = request.json.get('code')  # O código de autorização enviado pelo cliente
-    if not code:
-        return jsonify({'error': 'Authorization code missing'}), 400
+# Rota para o callback de autenticação
+@auth_bp.route("/callback")
+def callback():
+    flow = create_flow()
+    flow.fetch_token(authorization_response=request.url)
 
-    oauth_flow = create_oauth_flow()
-    oauth_flow.fetch_token(
-        token_url="https://oauth2.googleapis.com/token",
-        authorization_response=f'https://localhost:5000?code={code}',
-        client_secret=os.getenv("GOOGLE_OAUTH_SECRETS_SECRET")
+    if not session["state"] == request.args["state"]:
+        abort(500)  # State does not match!
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=app.config["GOOGLE_CLIENT_ID"]
     )
-    
-    session['access_token'] = oauth_flow.credentials.token
-    user_info = get_user_info(session['access_token'])
-    return jsonify(user_info)
 
-@auth_bp.route('/')
-def home():
-    if "access_token" in session:
-        user_info = get_user_info(session["access_token"])
-        if user_info:
-            return render_template('home.html', user_info=user_info)
-    return render_template('home.html')
+    session["google_id"] = id_info.get("sub")
+    session["name"] = id_info.get("name")
+    return redirect("/user/dashboard")
 
-
-def get_user_info(access_token):
-    response = requests.get("https://www.googleapis.com/oauth2/v3/userinfo", headers={
-        "Authorization": f"Bearer {access_token}"
-    })
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Failed to fetch user info: {response.status_code} {response.text}")
-        return None
-
-
-@auth_bp.route('/logout')
+# Rota para logout
+@auth_bp.route("/logout")
 def logout():
     session.clear()
-    return redirect('/')
+    return redirect("/")

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+        }
+        .navbar h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+        .logout-button {
+            background-color: #fff;
+            color: #4285f4;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #e0e0e0;
+        }
+        .dashboard-content {
+            padding: 20px;
+            text-align: center;
+        }
+        .dashboard-content h2 {
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar com título e botão de logout -->
+    <div class="navbar">
+        <h1>Dashboard</h1>
+        <a href="/logout">
+            <button class="logout-button">Logout</button>
+        </a>
+    </div>
+
+    <!-- Conteúdo do dashboard -->
+    <div class="dashboard-content">
+        <h2>Bem-vindo, {{ name }}!</h2>
+        <p>Você está logado com sucesso.</p>
+    </div>
+</body>
+</html>

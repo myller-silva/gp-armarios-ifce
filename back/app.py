@@ -1,24 +1,26 @@
-from flask import Flask
-import os
-from routes.user import user_bp
+from flask import Flask, redirect, session
 from routes.auth import auth_bp
-# import ssl
+from routes.main import main_bp
+from routes.user import user_bp
 
+app = Flask("SIGMAR")
+app.secret_key = "minhanhaultrasecreta"
 
-app = Flask(__name__)
-app.secret_key = "YOUR_SECRET_KEY"  # Defina uma chave secreta para segurança
+# Configurações do Google Client ID e client secret file
+app.config["GOOGLE_CLIENT_ID"] = "74540842304-q5pi385lc5jhhshaotuebqdkmhd179pd.apps.googleusercontent.com"
+app.config["CLIENT_SECRETS_FILE"] = "client_secret.json"
 
-app.config["GOOGLE_OAUTH_SECRETS"] = os.getenv("GOOGLE_OAUTH_SECRETS")
+# Registro dos Blueprints
+app.register_blueprint(auth_bp) # sem url_prefix, pois não é necessário
 
-# Registrando os blueprints
-app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(main_bp)
 app.register_blueprint(user_bp, url_prefix="/user")
+
+@app.route("/")
+def index():
+    return redirect("/user/dashboard") if "google_id" in session else redirect("/login")
 
 
 
 if __name__ == "__main__":
-    # app.run(debug=True)
-    # app.run(ssl_context=('cert.pem', 'key.pem'))  # Adiciona o SSL
-    app.run(ssl_context=('server.crt', 'server.key'))
-
-
+    app.run(debug=True)
