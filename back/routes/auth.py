@@ -29,7 +29,6 @@ def login_is_required(function):
         return function(*args, **kwargs)
     return wrapper
 
-# Rota para login
 @auth_bp.route("/login")
 def login():
     flow = create_flow()
@@ -59,9 +58,9 @@ def callback():
 
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
+    
     return redirect("/user/dashboard")
 
-# Rota para logout
 @auth_bp.route("/logout")
 def logout():
     session.clear()
