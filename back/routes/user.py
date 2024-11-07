@@ -1,0 +1,7 @@
+from flask import Blueprint
+
+user_bp = Blueprint('user', __name__, template_folder='templates')
+
+@user_bp.route('/')
+def root():
+    return '<h1>Bem vindo a area do usuario!</h1>'

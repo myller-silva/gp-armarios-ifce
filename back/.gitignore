@@ -23,3 +23,8 @@ node_modules/
 
 # Arquivos de configuração de ambiente
 .env
+
+/instance/
+
+# ignorar client secret
+client_secret.json
