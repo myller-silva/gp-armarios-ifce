@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
+        /* Tema claro */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             background-color: #f4f4f9;
+            color: #333;
         }
         .navbar {
             display: flex;
@@ -22,7 +24,7 @@
             font-size: 20px;
             margin: 0;
         }
-        .logout-button {
+        .logout-button, .theme-toggle-button {
             background-color: #fff;
             color: #4285f4;
             border: none;
@@ -31,8 +33,9 @@
             font-size: 14px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-left: 10px;
         }
-        .logout-button:hover {
+        .logout-button:hover, .theme-toggle-button:hover {
             background-color: #e0e0e0;
         }
         .dashboard-content {
@@ -41,17 +44,36 @@
         }
         .dashboard-content h2 {
             font-size: 24px;
-            color: #333;
+        }
+
+        /* Tema escuro */
+        body.dark-mode {
+            background-color: #333;
+            color: #f4f4f9;
+        }
+        .dark-mode .navbar {
+            background-color: #222;
+            color: #f4f4f9;
+        }
+        .dark-mode .logout-button, .dark-mode .theme-toggle-button {
+            background-color: #333;
+            color: #f4f4f9;
+        }
+        .dark-mode .logout-button:hover, .dark-mode .theme-toggle-button:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar com título e botão de logout -->
+    <!-- Navbar com título, botão de logout e botão de tema -->
     <div class="navbar">
         <h1>Dashboard</h1>
-        <a href="/logout">
-            <button class="logout-button">Logout</button>
-        </a>
+        <div>
+            <a href="{{ url_for('auth.logout') }}">
+                <button class="logout-button">Logout</button>
+            </a>
+            <button class="theme-toggle-button" onclick="toggleTheme()">Trocar Tema</button>
+        </div>
     </div>
 
     <!-- Conteúdo do dashboard -->
@@ -59,5 +81,11 @@
         <h2>Bem-vindo, {{ name }}!</h2>
         <p>Você está logado com sucesso.</p>
     </div>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+    </script>
 </body>
 </html>
