@@ -1,3 +1,8 @@
+"""
+app.py
+Este arquivo é o ponto de entrada da aplicação. Aqui são definidas as rotas e os blueprints.
+"""
+
 import os
 from flask import Flask, redirect, session
 from routes.auth import auth_bp
@@ -19,6 +24,9 @@ app.register_blueprint(user_bp, url_prefix="/user")
 
 @app.route("/")
 def index():
+    """
+    Rota inicial da aplicação.
+    """
     return redirect("/user/dashboard") if "google_id" in session else redirect("/login")
 
 
