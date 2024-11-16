@@ -25,7 +25,8 @@ app.register_blueprint(user_bp, url_prefix="/user")
 @app.route("/")
 def index():
     """
-    Rota inicial da aplicação. Aqui é feito um redirecionamento para a rota de dashboard do usuário, caso ele esteja logado.
+    Rota inicial da aplicação. 
+    Aqui é feito um redirecionamento para a rota de dashboard do usuário, caso ele esteja logado.
     """
     return redirect("/user/dashboard") if "google_id" in session else redirect("/login")
 
