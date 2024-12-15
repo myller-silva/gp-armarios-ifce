@@ -6,6 +6,7 @@ from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
+from models import User, db
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -58,6 +59,22 @@ def callback():
 
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
+    if User.query.first() is None:
+        user = User(username=session["name"], email=id_info.get("email"), role="admin")
+        db.session.add(user)
+        db.session.commit()
+    
+    # Verifica se o usuário já existe no banco de dados, caso contrário, cria um novo
+    user = User.query.filter_by(email=id_info.get("email")).first()
+    if user is None:
+        user = User(username=session["name"], email=id_info.get("email"))
+        db.session.add(user)
+        db.session.commit()
+    
+    session["username"] = user.username
+    session["user_id"] = user.id
+    session["role"] = user.role
+    session["email"] = user.email
     
     return redirect("/user/dashboard")
 

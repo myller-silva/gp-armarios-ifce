@@ -78,10 +78,17 @@
 
     <!-- Conteúdo do dashboard -->
     <div class="dashboard-content">
-        <h2>Bem-vindo, {{ name }}!</h2>
-        <p>Você está logado com sucesso.</p>
-    </div>
 
+        <h2>Bem-vindo, {{ user.name }}!</h2>
+        <p>Você é um usuário com a role: {{ user.role }}</p>
+        <p>Seu e-mail é: {{ user.email }}</p>
+        <p>Você está logado com sucesso.</p>
+
+		{% if user.role == 'admin' %}
+				<button>Ver usuários</button>
+				<button>Ver armarios</button>
+		{% endif %}
+	</div>
     <script>
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
