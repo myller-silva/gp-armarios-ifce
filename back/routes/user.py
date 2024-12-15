@@ -9,3 +9,4 @@ user_bp = Blueprint("user", __name__, url_prefix="/user")
 def dashboard():
     user_name = session.get("name", "Usuário")
     return render_template("dashboard.html", name=user_name)
+
