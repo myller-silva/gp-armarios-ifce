@@ -4,11 +4,13 @@ from flask import render_template, Blueprint, request, jsonify, redirect, url_fo
 from models import Location, User
 import json
 from data_initializer import initialize_data
+from decorators import role_required
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 @admin_bp.route("/configure", methods=["GET", "POST"])
+@role_required('admin')
 def configure():
     if request.method == "POST":
         file = request.files.get("json_file")
@@ -26,6 +28,7 @@ def configure():
 
 
 @admin_bp.route("/populate")
+@role_required('admin')
 def populate():
     try:
         json_file = request.args.get("json_file")
@@ -38,6 +41,7 @@ def populate():
 
 
 @admin_bp.route("/availability", methods=["GET"])
+@role_required('admin')
 def locker_availability():
     # Consulta todas as localizações (blocos)
     locations = Location.query.all()
@@ -70,6 +74,7 @@ def locker_availability():
 
 
 @admin_bp.route("/users")
+@role_required('admin')
 def users():
     """Rota para a listagem de usuários."""
     # Captura os parâmetros de filtro da URL

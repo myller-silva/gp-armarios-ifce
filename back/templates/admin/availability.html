@@ -4,39 +4,23 @@
 {% block title_navbar %}Disponibilidade de Armários{% endblock %}
 
 {% block content %}
-    <style>
-        h2 {
-            margin-bottom: 20px; /* Adiciona espaço abaixo do título */
-        }
+<h2>Disponibilidade de Armários</h2>
 
-        table {
-            clear: both; /* Garante que o conteúdo não se sobreponha ao título */
-        }
-    </style>
-
-    <!-- Tabela com estilo adequado -->
-    <div>
-        <table border="1" cellpadding="10" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Bloco/Localidade</th>
-                    <th>Descrição</th>
-                    <th>Total</th>
-                    <th>Livres</th>
-                    <th>Disponibilidade</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for location in availability_data %}
-                <tr>
-                    <td>{{ location.location_dict.name }}</td>
-                    <td>{{ location.location_dict.description }}</td>
-                    <td>{{ location.total_lockers }}</td>
-                    <td>{{ location.free_lockers }}</td>
-                    <td>{{ location.percent_free }}%</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+{% if availability_data %}
+    {% set headers = ["Bloco/Localidade", "Descrição", "Total", "Livres", "Disponibilidade (%)"] %}
+    {% set rows = [] %}
+    {% for location in availability_data %}
+        {% set row = [
+            location.location_dict.name,
+            location.location_dict.description,
+            location.total_lockers,
+            location.free_lockers,
+            location.percent_free
+        ] %}
+        {% set _ = rows.append(row) %}
+    {% endfor %}
+    {% include "components/table.html" %}
+{% else %}
+    <p>Nenhum dado de disponibilidade encontrado.</p>
+{% endif %}
 {% endblock %}

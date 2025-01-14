@@ -30,6 +30,15 @@ class User(db.Model):
             "email": self.email,
             "role": self.role,
         }
+    
+    def to_table_row(self):
+        """Retorna os dados no formato de uma linha de tabela"""
+        return [
+            self.id,
+            self.username,
+            self.email,
+            self.role
+        ]
 
 
 class Location(db.Model):
@@ -113,3 +122,39 @@ class Reservation(db.Model):
         }
 
 
+class Request(db.Model):
+    """Modelo de dados para solicitações de armários"""
+    __tablename__ = "requests"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey("locations.id"), nullable=False)
+    request_date = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
+    status = db.Column(db.String(20), nullable=False, default="pendente")  # pendente, aprovado, rejeitado
+    admin_comment = db.Column(db.String(200), nullable=True)  # Comentário do admin ao aprovar/rejeitar a solicitação
+
+    # Relacionamento
+    user = db.relationship("User", backref="requests", lazy=True)
+    location = db.relationship("Location", backref="requests", lazy=True)
+
+    def __repr__(self):
+        return f"<Request {self.id} - {self.status}>"
+    
+    def to_dict(self):
+        """Retorna um dicionário com os dados da solicitação"""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "location_id": self.location_id,
+            "request_date": self.request_date,
+            "status": self.status,
+            "admin_comment": self.admin_comment,
+        }
+    
+    def to_table_row(self):
+        """Retorna os dados no formato de uma linha de tabela"""
+        return [
+            self.id,
+            self.location.name if self.location else "N/A",
+            self.request_date.strftime("%d/%m/%Y %H:%M"),
+            self.status
+        ]

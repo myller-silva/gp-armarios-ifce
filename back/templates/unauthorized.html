@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Não Autorizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8d7da;
+            color: #721c24;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #721c24;
+            font-weight: bold;
+            background-color: #f5c6cb;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            background-color: #f1a7b8;
+        }
+    </style>
+</head>
+<body>
+    <h1>403 - Acesso Não Autorizado</h1>
+    <p>Você não tem permissão para acessar esta página.</p>
+    <p>Se você acredita que isso é um erro, entre em contato com o administrador.</p>
+    <a href="{{ url_for('index') }}">Voltar para a página inicial</a>
+</body>
+</html>

@@ -7,20 +7,18 @@
 <div class="dashboard-content">
     <h2>Bem-vindo, {{ user.name }}!</h2>
 
-    {% if user.role == 'admin' %}
+    <div class="button-container">
+        {% if user.role == 'admin' %}
+        <a href="{{ url_for('admin.users') }}" class="dashboard-button">Usuários</a>
+        <a href="{{ url_for('admin.locker_availability') }}" class="dashboard-button">Disponibilidade de Armários</a>
+        <a href="{{ url_for('admin.configure') }}" class="dashboard-button">Configuração</a>
+        {% endif %}
 
-    <a href="{{ url_for('admin.users') }}">
-        <button>Usuarios</button>
-    </a>
-
-    <a href="{{ url_for('admin.locker_availability') }}">
-        <button>Disponibilidade de Armarios</button>
-    </a>
-
-    <a href="{{ url_for('admin.configure') }}">
-        <button>Configuração</button>
-    </a>
-    {% endif %}
-
+        {% if user.role == 'aluno' %}
+        <a href="{{ url_for('student.request_locker') }}" class="dashboard-button">Solicitar Armário</a>
+        <a href="{{ url_for('student.my_requests') }}" class="dashboard-button">Minhas Solicitações</a>
+        <a href="{{ url_for('student.locker') }}" class="dashboard-button">Meu Armário</a>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

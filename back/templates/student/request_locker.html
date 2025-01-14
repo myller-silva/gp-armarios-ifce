@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitação de Armário{% endblock %}
+{% block title_navbar %}Solicitação de Armário{% endblock %}
+
+{% block content %}
+<h2>Solicitação de Armário</h2>
+<p>Escolha a localidade onde deseja solicitar um armário. Um administrador irá avaliar sua solicitação.</p>
+
+<form action="{{ url_for('student.request_locker') }}" method="POST">
+    <div>
+        <label for="location_id">Selecione uma Localidade:</label>
+    </div>
+    <div>
+        <select id="location_id" name="location_id" required>
+            <option value="" disabled selected>Selecione uma localidade</option>
+            {% for location in locations %}
+                <option value="{{ location.id }}">{{ location.name }} - {{ location.description }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <button type="submit">Solicitar Armário</button>
+    </div>
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+{% endblock %}

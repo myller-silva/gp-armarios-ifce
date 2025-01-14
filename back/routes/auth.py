@@ -1,5 +1,4 @@
 import os
-import pathlib
 import requests
 from flask import Blueprint, session, redirect, request, abort, current_app as app
 from google.oauth2 import id_token
@@ -22,13 +21,6 @@ def create_flow():
         redirect_uri="http://127.0.0.1:5000/callback"
     )
 
-# Decorador para verificar login
-def login_is_required(function):
-    def wrapper(*args, **kwargs):
-        if "google_id" not in session:
-            return abort(401)  # Authorization required
-        return function(*args, **kwargs)
-    return wrapper
 
 @auth_bp.route("/login")
 def login():

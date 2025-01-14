@@ -1,13 +1,13 @@
-from flask import Blueprint, session, render_template
-from routes.auth import login_is_required
+from flask import Blueprint,  render_template
 
 main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def index():
-    return render_template("index.html") 
+    """Rota para a página inicial"""
+    return render_template("index.html")
 
-# @main_bp.route("/protected_area")
-# @login_is_required
-# def protected_area():
-#     return f"Hello {session['name']}! <br/> <a href='/logout'><button>Logout</button></a>"
+@main_bp.route("/unauthorized")
+def unauthorized():
+    """Rota para a página de acesso não autorizado"""
+    return render_template("unauthorized.html")

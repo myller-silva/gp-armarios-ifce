@@ -9,6 +9,7 @@ from routes.auth import auth_bp
 from routes.main import main_bp
 from routes.user import user_bp
 from routes.admin import admin_bp
+from routes.student import student_bp
 from flask_migrate import Migrate
 # from data_initializer import initialize_data
 
@@ -37,6 +38,7 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(user_bp, url_prefix="/user")
     app.register_blueprint(admin_bp, url_prefix="/admin")
+    app.register_blueprint(student_bp, url_prefix="/student")
     
     return app
 

@@ -1,18 +1,28 @@
-<!-- templates/admin/configure.html -->
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configuração de Banco de Dados</title>
-</head>
-<body>
+{% block title %}Configuração de Banco de Dados{% endblock %}
+{% block title_navbar %}Configuração de Banco de Dados{% endblock %}
+
+{% block content %}
     <h1>Configuração de Banco de Dados</h1>
+    <p>
+        Esta tela permite que você envie um arquivo JSON contendo as configurações necessárias para 
+        configurar o banco de dados. O arquivo JSON deve seguir o formato adequado para garantir 
+        que as configurações sejam aplicadas corretamente.
+    </p>
+    <p>
+        Por favor, selecione o arquivo JSON e clique em "Enviar" para aplicar as configurações.
+    </p>
+    
     <form action="{{ url_for('admin.configure') }}" method="POST" enctype="multipart/form-data">
-        <label for="json_file">Selecione o arquivo JSON:</label>
-        <input type="file" id="json_file" name="json_file" accept=".json" required>
-        <button type="submit">Enviar</button>
+        <div>
+            <label for="json_file">Selecione o arquivo JSON:</label>
+        </div>
+        <div>
+            <input type="file" id="json_file" name="json_file" accept=".json" required>
+        </div>
+        <div>
+            <button type="submit">Enviar</button>
+        </div>
     </form>
-</body>
-</html>
+{% endblock %}

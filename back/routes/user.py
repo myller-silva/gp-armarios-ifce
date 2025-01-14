@@ -1,5 +1,5 @@
 from flask import Blueprint, session, render_template, redirect, url_for
-from routes.auth import login_is_required
+from decorators import login_is_required
 
 # Criação do blueprint para o usuário
 user_bp = Blueprint("user", __name__, url_prefix="/user")
@@ -12,6 +12,7 @@ def dashboard():
     return render_template("dashboard.html", user = user)
 
 @user_bp.route("/perfil")
+@login_is_required
 def perfil():
     """Função para renderizar o perfil do usuário"""
     user = session.get("user")

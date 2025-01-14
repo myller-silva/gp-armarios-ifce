@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas Solicitações{% endblock %}
+{% block title_navbar %}Minhas Solicitações{% endblock %}
+
+{% block content %}
+<h2>Minhas Solicitações</h2>
+
+{% if requests %}
+    {% set headers = ["ID", "Localidade", "Data da Solicitação", "Status"] %}
+    {% set rows = [] %}
+    {% for request in requests %}
+        {% set _ = rows.append(request.to_table_row()) %}
+    {% endfor %}
+    {% include "components/table.html" %}
+{% else %}
+    <p>Você ainda não fez nenhuma solicitação de armário.</p>
+{% endif %}
+{% endblock %}
