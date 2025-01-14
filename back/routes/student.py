@@ -32,12 +32,6 @@ def request_locker():
     locations = Location.query.all()
     return render_template("student/request_locker.html", locations=locations)
 
-# @student_bp.route("/requests")
-# @role_required('aluno')
-# def requests():
-#     """Rota para listar as solicitações de reserva do aluno"""
-#     reservations = Reservation.query.filter_by(user_id=1).all()
-#     return render_template("student/requests.html", reservations=reservations)
 
 from flask import jsonify
 @student_bp.route("/my-requests", methods=["GET"])
@@ -50,9 +44,17 @@ def my_requests():
     # return jsonify([request.to_dict() for request in requests])
     return render_template("student/my_requests.html", requests=requests)
 
+from models import Locker
 
-@student_bp.route("/locker")
+@student_bp.route('/my-locker', methods=["GET"])
 @role_required('aluno')
-def locker():
-    """Rota para listar os armários do aluno"""
-    return render_template("student/locker.html")
+def my_reservation():
+    """Rota para visualizar o armário do estudante."""
+    
+    user = session.get("user")
+    user_id = user["id"]
+    reservation = Reservation.query.filter_by(user_id=user_id, status="ativa").first()
+    if reservation:
+        return render_template("student/my_reservation.html", reservation=reservation)
+    else:
+        return render_template("student/my_reservation.html", message="Você não tem reserva atribuída.")

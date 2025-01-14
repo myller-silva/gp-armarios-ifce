@@ -2,6 +2,7 @@
 
 from flask import render_template, Blueprint, request, jsonify, redirect, url_for
 from models import Location, User
+from models import Request, db
 import json
 from data_initializer import initialize_data
 from decorators import role_required
@@ -95,3 +96,42 @@ def users():
 
     # Passa os usuários filtrados para o template
     return render_template("admin/users.html", users=users)
+
+
+from services.locker_request_service import LockerRequestService
+@admin_bp.route('/locker-requests', methods=["GET", "POST"])
+@role_required('admin')
+def locker_requests():
+    """Rota para visualizar as solicitações pendentes."""
+    if request.method == "POST":
+        # Processa as alterações de status através do serviço
+        status_updates = request.form.to_dict()  # Converte o formulário para um dicionário
+        LockerRequestService.process_requests(status_updates)
+        
+        return redirect(url_for('admin.locker_requests'))  
+    # # Consulta todas as solicitações pendentes
+    # requests = Request.query.filter_by(status='pendente').all()
+    requests = LockerRequestService.get_pending_requests()
+    return render_template("admin/locker_requests.html", requests=requests)
+
+
+# @admin_bp.route('/requests/accept/<int:id>', methods=["POST"])
+# @role_required('admin')
+# def accept_request(id):
+#     """Rota para aceitar uma solicitação."""
+#     request_user = Request.query.get(id)
+#     if request_user:
+#         request_user.status = 'aceito'
+#         db.session.commit()
+#     return redirect(url_for('admin.locker_requests'))  # Redireciona de volta para a página de solicitações
+
+
+# @admin_bp.route('/requests/deny/<int:id>', methods=["POST"])
+# @role_required('admin')
+# def deny_request(id):
+#     """Rota para negar uma solicitação."""
+#     locker_request = Request.query.get(id)
+#     if locker_request:
+#         locker_request.status = 'negado'
+#         db.session.commit()
+#     return redirect(url_for('admin.locker_requests'))  

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Armário{% endblock %}
+{% block title_navbar %}Meu Armário{% endblock %}
+
+{% block content %}
+
+    {% if reservation %}
+        <h3>Detalhes da Reserva</h3>
+        <div>
+            <p><strong>ID da Reserva:</strong> {{ reservation.id }}</p>
+            <p><strong>ID do Armário:</strong> {{ reservation.locker.id }}</p>
+            <p><strong>Data de Início:</strong> {{ reservation.start_date }}</p>
+            <p><strong>Data de Término:</strong> {{ reservation.end_date }}</p>
+        </div>
+        <h3>Informações do Armário</h3>
+        <div>
+            <p><strong>Número:</strong> {{ reservation.locker.number }}</p>
+            <p><strong>Status:</strong> {{ reservation.locker.status }}</p>
+            <p><strong>Localidade:</strong> {{ reservation.locker.location.name }}</p>
+        </div>
+    {% else %}
+        <p>{{ message }}</p>
+    {% endif %}
+{% endblock %}

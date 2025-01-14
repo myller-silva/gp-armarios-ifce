@@ -9,6 +9,7 @@
 
     <div class="button-container">
         {% if user.role == 'admin' %}
+        <a href="{{ url_for('admin.locker_requests') }}" class="dashboard-button">Solicitações de Armário</a>
         <a href="{{ url_for('admin.users') }}" class="dashboard-button">Usuários</a>
         <a href="{{ url_for('admin.locker_availability') }}" class="dashboard-button">Disponibilidade de Armários</a>
         <a href="{{ url_for('admin.configure') }}" class="dashboard-button">Configuração</a>
@@ -17,7 +18,7 @@
         {% if user.role == 'aluno' %}
         <a href="{{ url_for('student.request_locker') }}" class="dashboard-button">Solicitar Armário</a>
         <a href="{{ url_for('student.my_requests') }}" class="dashboard-button">Minhas Solicitações</a>
-        <a href="{{ url_for('student.locker') }}" class="dashboard-button">Meu Armário</a>
+        <a href="{{ url_for('student.my_reservation') }}" class="dashboard-button">Meu Armário</a>
         {% endif %}
     </div>
 </div>
