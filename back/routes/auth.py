@@ -71,10 +71,7 @@ def callback():
         db.session.add(user)
         db.session.commit()
     
-    session["username"] = user.username
-    session["user_id"] = user.id
-    session["role"] = user.role
-    session["email"] = user.email
+    session["user"] = user.to_dict()
     
     return redirect("/user/dashboard")
 

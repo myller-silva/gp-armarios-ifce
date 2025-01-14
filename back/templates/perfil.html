@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Perfil do Usuário{% endblock %}
+
+{% block title_navbar %}Perfil{% endblock %}
+
+{% block content %}
+<div class="perfil">
+    <h2>Perfil do Usuário</h2>
+    <p><strong>Nome:</strong> {{ user.name }}</p>
+    <p><strong>Tipo:</strong> {{ user.role }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <!-- <p><strong>ID:</strong> {{ user.id }}</p> -->
+</div>
+{% endblock %}

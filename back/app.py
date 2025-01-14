@@ -8,7 +8,10 @@ from flask import Flask, redirect, session
 from routes.auth import auth_bp
 from routes.main import main_bp
 from routes.user import user_bp
+from routes.admin import admin_bp
 from flask_migrate import Migrate
+# from data_initializer import initialize_data
+
 
 from models import db
 
@@ -33,6 +36,8 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(admin_bp, url_prefix="/admin")
+    
     return app
 
 app = create_app()
@@ -40,6 +45,15 @@ app = create_app()
 
 @app.route("/")
 def index():
+    """
+    Rota inicial da aplicação. 
+    Aqui é feito um redirecionamento para a rota de dashboard do usuário, caso ele esteja logado.
+    """
+    return redirect("/user/dashboard") if "google_id" in session else redirect("/login")
+
+
+@app.route("/home")
+def home():
     """
     Rota inicial da aplicação. 
     Aqui é feito um redirecionamento para a rota de dashboard do usuário, caso ele esteja logado.

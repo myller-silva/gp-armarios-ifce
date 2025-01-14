@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários Cadastrados{% endblock %}
+{% block title_navbar %}Usuários Cadastrados{% endblock %}
+
+
+{% block content %}
+<div class="dashboard-content">
+    <!-- <h2>Usuários Cadastrados</h2> -->
+    <!-- Formulário para filtros -->
+    <form method="GET">
+        <label for="email">Email:</label>
+        <input type="text" name="email" id="email" value="{{ request.args.get('email', '') }}">
+        
+        <label for="role">Role:</label>
+        <select name="role" id="role">
+            <option value="">Todos</option>
+            <option value="admin" {% if request.args.get('role') == 'admin' %}selected{% endif %}>Admin</option>
+            <option value="user" {% if request.args.get('role') == 'user' %}selected{% endif %}>User</option>
+        </select>
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

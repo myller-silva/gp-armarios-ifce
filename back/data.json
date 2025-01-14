@@ -1,0 +1,29 @@
+{
+    "locations": [
+        {
+            "name": "Bloco 1",
+            "description": "Bloco da Química",
+            "lockers": [
+                { "number": 101, "status": "livre" },
+                { "number": 102, "status": "livre" },
+                { "number": 103, "status": "livre" },
+                { "number": 104, "status": "livre" },
+                { "number": 105, "status": "livre" },
+                { "number": 106, "status": "livre" }
+            ]
+        },
+        {
+            "name": "Bloco 2",
+            "description": "Bloco da Mecânica",
+            "lockers": [
+                { "number": 201, "status": "livre" },
+                { "number": 202, "status": "livre" }
+            ]
+        },
+        {
+            "name": "Bloco 3",
+            "description": "Bloco da Computação",
+            "capacity": 50
+        }
+    ]
+}

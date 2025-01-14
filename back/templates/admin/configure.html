@@ -1,0 +1,18 @@
+<!-- templates/admin/configure.html -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração de Banco de Dados</title>
+</head>
+<body>
+    <h1>Configuração de Banco de Dados</h1>
+    <form action="{{ url_for('admin.configure') }}" method="POST" enctype="multipart/form-data">
+        <label for="json_file">Selecione o arquivo JSON:</label>
+        <input type="file" id="json_file" name="json_file" accept=".json" required>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
