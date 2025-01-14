@@ -33,7 +33,6 @@ def request_locker():
     return render_template("student/request_locker.html", locations=locations)
 
 
-from flask import jsonify
 @student_bp.route("/my-requests", methods=["GET"])
 @role_required('aluno')
 def my_requests():
@@ -44,7 +43,6 @@ def my_requests():
     # return jsonify([request.to_dict() for request in requests])
     return render_template("student/my_requests.html", requests=requests)
 
-from models import Locker
 
 @student_bp.route('/my-locker', methods=["GET"])
 @role_required('aluno')
@@ -58,3 +56,16 @@ def my_reservation():
         return render_template("student/my_reservation.html", reservation=reservation)
     else:
         return render_template("student/my_reservation.html", message="Você não tem reserva atribuída.")
+
+
+from services.locker_availability_service import calculate_availability
+
+@student_bp.route("/availability", methods=["GET"])
+@role_required('aluno')
+def locker_availability():
+    """Rota para a disponibilidade de armários."""
+    locker_availability = calculate_availability()
+
+    return render_template(
+        "student/availability.html", availability_data=locker_availability
+    )

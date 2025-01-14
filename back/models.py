@@ -55,12 +55,13 @@ class Location(db.Model):
         return f"<Location {self.name}>"
 
     def to_dict(self):
-        """Retorna um dicionário com os dados da localização"""
+        """Converte o modelo Location para um dicionário."""
         return {
             "id": self.id,
             "name": self.name,
             "description": self.description,
         }
+
 
 
 

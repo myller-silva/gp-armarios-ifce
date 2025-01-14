@@ -1,8 +1,7 @@
 """Rotas para a área administrativa do sistema."""
 
-from flask import render_template, Blueprint, request, jsonify, redirect, url_for
+from flask import render_template, Blueprint, request, redirect, url_for
 from models import Location, User
-from models import Request, db
 import json
 from data_initializer import initialize_data
 from decorators import role_required
@@ -40,37 +39,16 @@ def populate():
     except Exception as e:
         return f"Erro ao popular dados: {e}"
 
+from services.locker_availability_service import calculate_availability
 
 @admin_bp.route("/availability", methods=["GET"])
 @role_required('admin')
 def locker_availability():
-    # Consulta todas as localizações (blocos)
-    locations = Location.query.all()
+    """Rota para a disponibilidade de armários."""
+    locker_availability = calculate_availability()
 
-    # Cria uma lista para armazenar as informações de cada bloco
-    availability_data = []
-
-    for location in locations:
-        total_lockers = len(location.lockers)
-        free_lockers = sum(1 for locker in location.lockers if locker.status == "livre")
-
-        # Calcula o percentual de armários livres
-        percent_free = (free_lockers / total_lockers * 100) if total_lockers > 0 else 0
-
-        # Adiciona os dados do bloco na lista
-        availability_data.append(
-            {
-                # "location_name": location.name,
-                "location_dict": location.to_dict(),
-                "total_lockers": total_lockers,
-                "free_lockers": free_lockers,
-                "percent_free": round(percent_free, 2),
-            }
-        )
-
-    # Renderiza um template para exibir os dados
     return render_template(
-        "admin/availability.html", availability_data=availability_data
+        "admin/availability.html", availability_data=locker_availability
     )
 
 
@@ -114,24 +92,3 @@ def locker_requests():
     requests = LockerRequestService.get_pending_requests()
     return render_template("admin/locker_requests.html", requests=requests)
 
-
-# @admin_bp.route('/requests/accept/<int:id>', methods=["POST"])
-# @role_required('admin')
-# def accept_request(id):
-#     """Rota para aceitar uma solicitação."""
-#     request_user = Request.query.get(id)
-#     if request_user:
-#         request_user.status = 'aceito'
-#         db.session.commit()
-#     return redirect(url_for('admin.locker_requests'))  # Redireciona de volta para a página de solicitações
-
-
-# @admin_bp.route('/requests/deny/<int:id>', methods=["POST"])
-# @role_required('admin')
-# def deny_request(id):
-#     """Rota para negar uma solicitação."""
-#     locker_request = Request.query.get(id)
-#     if locker_request:
-#         locker_request.status = 'negado'
-#         db.session.commit()
-#     return redirect(url_for('admin.locker_requests'))  

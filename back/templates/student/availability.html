@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Disponibilidade de Armários{% endblock %}
+{% block title_navbar %}Disponibilidade de Armários{% endblock %}
+
+{% block content %}
+<h2>Disponibilidade de Armários</h2>
+
+{% if availability_data %}
+    {% set headers = ["Bloco/Localidade", "Descrição", "Total", "Livres", "Disponibilidade (%)"] %}
+    {% set rows = [] %}
+    {% for location in availability_data %}
+        {% set row = [
+            location.location_dict.name,
+            location.location_dict.description,
+            location.total_lockers,
+            location.free_lockers,
+            location.percent_free
+        ] %}
+        {% set _ = rows.append(row) %}
+    {% endfor %}
+    {% include "components/table.html" %}
+{% else %}
+    <p>Nenhum dado de disponibilidade encontrado.</p>
+{% endif %}
+{% endblock %}

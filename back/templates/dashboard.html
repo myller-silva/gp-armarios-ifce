@@ -18,6 +18,7 @@
         {% if user.role == 'aluno' %}
         <a href="{{ url_for('student.request_locker') }}" class="dashboard-button">Solicitar Armário</a>
         <a href="{{ url_for('student.my_requests') }}" class="dashboard-button">Minhas Solicitações</a>
+        <a href="{{ url_for('student.locker_availability') }}" class="dashboard-button">Disponibilidade de Armários</a>
         <a href="{{ url_for('student.my_reservation') }}" class="dashboard-button">Meu Armário</a>
         {% endif %}
     </div>
