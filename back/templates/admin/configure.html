@@ -4,25 +4,38 @@
 {% block title_navbar %}Configuração de Banco de Dados{% endblock %}
 
 {% block content %}
-    <h1>Configuração de Banco de Dados</h1>
-    <p>
-        Esta tela permite que você envie um arquivo JSON contendo as configurações necessárias para 
-        configurar o banco de dados. O arquivo JSON deve seguir o formato adequado para garantir 
-        que as configurações sejam aplicadas corretamente.
-    </p>
-    <p>
-        Por favor, selecione o arquivo JSON e clique em "Enviar" para aplicar as configurações.
-    </p>
-    
-    <form action="{{ url_for('admin.configure') }}" method="POST" enctype="multipart/form-data">
-        <div>
-            <label for="json_file">Selecione o arquivo JSON:</label>
-        </div>
-        <div>
-            <input type="file" id="json_file" name="json_file" accept=".json" required>
-        </div>
-        <div>
-            <button type="submit">Enviar</button>
-        </div>
-    </form>
+<h2>Configurar Sistema</h2>
+<form id="json-upload-form" method="POST" enctype="multipart/form-data">
+    <label for="json_file">Selecionar Arquivo JSON:</label>
+    <input type="file" name="json_file" id="json_file" required>
+    <button type="submit">Enviar</button>
+</form>
+
+<!-- Exibir mensagens de sucesso ou erro -->
+<div id="flash-message" style="margin-top: 10px;"></div>
+
+<script>
+    document.getElementById('json-upload-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Evita o reload da página
+
+        const formData = new FormData(this);
+
+        fetch("{{ url_for('admin.configure') }}", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const messageDiv = document.getElementById('flash-message');
+            messageDiv.innerText = data.message;
+            messageDiv.style.color = data.status === 'success' ? 'green' : 'red';
+        })
+        .catch(error => {
+            console.error("Erro:", error);
+            const messageDiv = document.getElementById('flash-message');
+            messageDiv.innerText = "Erro ao enviar o arquivo.";
+            messageDiv.style.color = "red";
+        });
+    });
+</script>
 {% endblock %}

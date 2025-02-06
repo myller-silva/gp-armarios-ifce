@@ -1,6 +1,8 @@
 """Módulo para manipulação de usuários."""
 
 from repositories.user_repository import UserRepository
+from services.request_service import RequestService
+from services.session_service import SessionService
 
 
 class UserService:
@@ -49,3 +51,16 @@ class UserService:
         if not user:
             raise ValueError("User not found")
         return UserRepository.update_user(user_id, name, email)
+
+    # @staticmethod
+    # def get_user_requests(user_id):
+    #     """Retorna as solicitações de um usuário."""
+    #     return RequestService.get_requests_filtered({"user_id": user_id})
+    
+    @staticmethod
+    def get_user_requests():
+        """Retorna as solicitações de um usuário."""
+        user = SessionService.get_user()
+        user_id = user["id"]
+        return RequestService.get_requests_filtered({"user_id": user_id})
+    

@@ -1,0 +1,13 @@
+{
+    "locations": [
+        {
+            "name": "Bloco 7",
+            "description": "Bloco Fake 7",
+            "lockers": [
+                { "number": 601, "status": "livre" },
+                { "number": 602, "status": "livre" },
+                { "number": 603, "status": "livre" }
+            ]
+        }
+    ]
+}
