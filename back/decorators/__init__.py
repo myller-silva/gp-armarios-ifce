@@ -12,14 +12,14 @@ def role_required(role):
             user = session.get('user')
             user_role = user.get('role') if user else None
             if user_role != role:
-                return redirect(url_for('main.unauthorized'))  # Redireciona para uma página de acesso não autorizado
+                return redirect(url_for('main.unauthorized'))
             return f(*args, **kwargs)
         return decorated_function
     return decorator
 
 
 def login_is_required(function):
-    """Decorator para verificar se o usuário está logado"""
+    """Decorator para verificar se o usuário está logado antes de acessar a rota"""
     @wraps(function)
     def decorated_function(*args, **kwargs):
         if "user" not in session:
