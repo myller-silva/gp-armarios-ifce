@@ -1,5 +1,6 @@
+"""Módulo de serviço de sessão."""
 from flask import session
-
+from models import User
 
 class SessionService:
     """Classe de serviço de sessão"""
@@ -10,6 +11,12 @@ class SessionService:
         return session.get("user")
 
     @staticmethod
-    def set_user(user):
-        """Define o usuário da sessão"""
-        session["user"] = user
+    def set_user(user: User):
+        """Define o usuário da sessão."""
+        session["user"] = user.to_dict()
+
+    @staticmethod
+    def clear():
+        """Limpa a sessão."""
+        session.clear()
+        

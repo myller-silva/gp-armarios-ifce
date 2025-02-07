@@ -11,7 +11,6 @@ class UserService:
     @staticmethod
     def get_all_users():
         """Retorna todos os usuários."""
-        # Possibilidade de adicionar lógica adicional (exemplo: filtragens)
         return UserRepository.get_all()
 
     @staticmethod
@@ -23,14 +22,36 @@ class UserService:
         return user
 
     @staticmethod
-    def create_user(name, email):
+    def get_user_by_email(email):
+        """Retorna um usuário pelo e-mail."""
+        return UserRepository.get_by_email(email)
+
+    @staticmethod
+    def create_user(name: str, email: str, role: str):
         """Cria um novo usuário."""
-        # Exemplo de regra de negócio adicional
         if "@" not in email:
             raise ValueError("Invalid email format")
-        return UserRepository.create_user(name, email)
+        user = UserRepository.create_user(name=name, email=email, role=role)
+        return user
 
-    # filtro de usuários
+    @staticmethod
+    def create_admin(name: str, email: str):
+        """Cria um novo usuário administrador."""
+        return UserService.create_user(name=name, email=email, role="admin")
+
+    @staticmethod
+    def create_student(name: str, email: str):
+        """Cria um novo usuário aluno."""
+        return UserService.create_user(name=name, email=email, role="aluno")
+
+    @staticmethod
+    def create_student_if_not_exists(name: str, email: str):
+        """Cria um novo usuário aluno se não existir."""
+        user = UserRepository.get_by_email(email)
+        if not user:
+            user = UserService.create_student(name, email)
+        return user
+
     @staticmethod
     def get_users_filtered(data):
         """Retorna usuários filtrados."""
@@ -52,15 +73,27 @@ class UserService:
             raise ValueError("User not found")
         return UserRepository.update_user(user_id, name, email)
 
-    # @staticmethod
-    # def get_user_requests(user_id):
-    #     """Retorna as solicitações de um usuário."""
-    #     return RequestService.get_requests_filtered({"user_id": user_id})
-    
     @staticmethod
     def get_user_requests():
         """Retorna as solicitações de um usuário."""
         user = SessionService.get_user()
         user_id = user["id"]
         return RequestService.get_requests_filtered({"user_id": user_id})
-    
+
+    @staticmethod
+    def has_any_user():
+        """Verifica se existe algum usuário no banco de dados."""
+        return UserRepository.has_any_user()
+
+    @staticmethod
+    def login(username: str, email: str):
+        """Realiza o login de um usuário.
+        Se for o primeiro usuário, ele é criado como administrador.
+        Se o usuário não existir, ele é criado como aluno.
+        """
+        if not UserService.has_any_user():
+            return UserService.create_admin(name=username, email=email)
+        user = UserService.get_user_by_email(email)
+        if not user:
+            return UserService.create_student(name=username, email=email)
+        return user

@@ -9,6 +9,8 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
+    """Modelo de dados para usuários"""
+
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=False)
@@ -21,7 +23,7 @@ class User(db.Model):
 
     def __repr__(self):
         return f"<User {self.username}>"
-    
+
     def to_dict(self):
         """Retorna um dicionário com os dados do usuário"""
         return {
@@ -30,19 +32,15 @@ class User(db.Model):
             "email": self.email,
             "role": self.role,
         }
-    
+
     def to_table_row(self):
         """Retorna os dados no formato de uma linha de tabela"""
-        return [
-            self.id,
-            self.username,
-            self.email,
-            self.role
-        ]
+        return [self.id, self.username, self.email, self.role]
 
 
 class Location(db.Model):
     """Modelo de dados para localizações dos armários"""
+
     __tablename__ = "locations"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)  # Nome do bloco/local
@@ -63,14 +61,12 @@ class Location(db.Model):
         }
 
 
-
-
-
 """Entidade Locker"""
 
 
 class Locker(db.Model):
     """Modelo de dados para armários"""
+
     __tablename__ = "lockers"
     id = db.Column(db.Integer, primary_key=True)
     number = db.Column(db.Integer, unique=True, nullable=False)
@@ -79,10 +75,10 @@ class Locker(db.Model):
 
     # Relacionamento
     reservations = db.relationship("Reservation", backref="locker", lazy=True)
-    
+
     def __repr__(self):
         return f"<Locker {self.number} - {self.status} - {self.location.name}>"
-    
+
     def to_dict(self):
         """Retorna um dicionário com os dados do armário"""
         return {
@@ -98,6 +94,7 @@ class Locker(db.Model):
 
 class Reservation(db.Model):
     """Modelo de dados para reservas"""
+
     __tablename__ = "reservations"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -110,7 +107,7 @@ class Reservation(db.Model):
 
     def __repr__(self):
         return f"<Reservation {self.id} - {self.status}>"
-    
+
     def to_dict(self):
         """Retorna um dicionário com os dados da reserva"""
         return {
@@ -125,13 +122,20 @@ class Reservation(db.Model):
 
 class Request(db.Model):
     """Modelo de dados para solicitações de armários"""
+
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     location_id = db.Column(db.Integer, db.ForeignKey("locations.id"), nullable=False)
-    request_date = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
-    status = db.Column(db.String(20), nullable=False, default="pendente")  # pendente, aprovado, rejeitado
-    admin_comment = db.Column(db.String(200), nullable=True)  # Comentário do admin ao aprovar/rejeitar a solicitação
+    request_date = db.Column(
+        db.DateTime, nullable=False, default=db.func.current_timestamp()
+    )
+    status = db.Column(
+        db.String(20), nullable=False, default="pendente"
+    )  # pendente, aprovado, rejeitado
+    admin_comment = db.Column(
+        db.String(200), nullable=True
+    )  # Comentário do admin ao aprovar/rejeitar a solicitação
 
     # Relacionamento
     user = db.relationship("User", backref="requests", lazy=True)
@@ -139,7 +143,7 @@ class Request(db.Model):
 
     def __repr__(self):
         return f"<Request {self.id} - {self.status}>"
-    
+
     def to_dict(self):
         """Retorna um dicionário com os dados da solicitação"""
         return {
@@ -150,12 +154,12 @@ class Request(db.Model):
             "status": self.status,
             "admin_comment": self.admin_comment,
         }
-    
+
     def to_table_row(self):
         """Retorna os dados no formato de uma linha de tabela"""
         return [
             self.id,
             self.location.name if self.location else "N/A",
             self.request_date.strftime("%d/%m/%Y %H:%M"),
-            self.status
+            self.status,
         ]

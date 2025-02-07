@@ -10,6 +10,11 @@ class UserRepository:
     def get_all():
         """Retorna todos os usuários."""
         return User.query.all()
+    
+    @staticmethod
+    def has_any_user():
+        """Verifica se existe algum usuário no banco de dados."""
+        return User.query.first() is not None
 
     @staticmethod
     def get_by_email(email):
@@ -22,9 +27,9 @@ class UserRepository:
         return User.query.get(user_id)
 
     @staticmethod
-    def create_user(name, email):
+    def create_user(name: str, email: str, role: str):
         """Cria um novo usuário."""
-        user = User(name=name, email=email)
+        user = User(username=name, email=email, role=role)
         db.session.add(user)
         db.session.commit()
         return user
@@ -36,7 +41,7 @@ class UserRepository:
         if user:
             db.session.delete(user)
             db.session.commit()
-            
+
     @staticmethod
     def update_user(user_id, name, email):
         """Atualiza um usuário."""
@@ -47,7 +52,7 @@ class UserRepository:
             db.session.commit()
             return user
         return None
-    
+
     @staticmethod
     def get_users_filtered(data):
         """Retorna usuários filtrados."""
@@ -55,5 +60,5 @@ class UserRepository:
         if data.get("email"):
             query = query.filter(User.email.ilike(f"%{data['email']}%"))
         if data.get("role"):
-            query = query.filter(User.role == data['role'])
+            query = query.filter(User.role == data["role"])
         return query.all()

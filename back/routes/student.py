@@ -1,3 +1,5 @@
+"""Rotas para o aluno."""
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from decorators import role_required
 from services.user_service import UserService
