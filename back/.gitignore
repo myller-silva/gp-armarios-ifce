@@ -28,3 +28,5 @@ node_modules/
 
 # ignorar client secret
 client_secret.json
+
+run.bat

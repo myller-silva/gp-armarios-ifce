@@ -1,11 +1,7 @@
-"""Módulo com rotas para autenticação com o Google."""
-
 import os
-import requests
-from flask import Blueprint, session, redirect, request, abort, current_app as app
+from flask import Blueprint, session, redirect, request, current_app as app, url_for
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
-from pip._vendor import cachecontrol
 import google.auth.transport.requests
 from services.user_service import UserService
 from services.session_service import SessionService
@@ -17,7 +13,7 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 
 def create_flow():
-    """Cria um fluxo OAuth2 para autenticação com o Google."""
+    """Cria um fluxo OAuth com as configurações necessárias."""
     return Flow.from_client_secrets_file(
         client_secrets_file=app.config["CLIENT_SECRETS_FILE"],
         scopes=[
@@ -25,7 +21,6 @@ def create_flow():
             "https://www.googleapis.com/auth/userinfo.email",
             "openid",
         ],
-        redirect_uri="http://127.0.0.1:5000/callback",
     )
 
 
@@ -33,7 +28,11 @@ def create_flow():
 def login():
     """Rota para iniciar o processo de autenticação."""
     flow = create_flow()
-    authorization_url, state = flow.authorization_url()
+    flow.redirect_uri = url_for("auth.callback", _external=True)
+    authorization_url, state = flow.authorization_url(
+        access_type="offline",  # necessário para obter um refresh token
+        include_granted_scopes="true",
+    )
     session["state"] = state
     return redirect(authorization_url)
 
@@ -41,23 +40,26 @@ def login():
 @auth_bp.route("/callback")
 def callback():
     """Rota para o callback de autenticação."""
+    # Verifica o estado para prevenir CSRF
+    if not session.get("state") == request.args.get("state"):
+        return "Invalid state parameter", 400
+
     flow = create_flow()
+    flow.redirect_uri = url_for("auth.callback", _external=True)
     flow.fetch_token(authorization_response=request.url)
-
-    if not session["state"] == request.args["state"]:
-        abort(500)
-
     credentials = flow.credentials
-    request_session = requests.session()
-    cached_session = cachecontrol.CacheControl(request_session)
-    token_request = google.auth.transport.requests.Request(session=cached_session)
-
+    session["credentials"] = {
+        "token": credentials.token,
+        "refresh_token": credentials.refresh_token,
+        "token_uri": credentials.token_uri,
+        "client_id": credentials.client_id,
+        "client_secret": credentials.client_secret,
+        "granted_scopes": credentials.scopes,
+    }
+    token_request = google.auth.transport.requests.Request()
     id_info = id_token.verify_oauth2_token(
-        id_token=credentials._id_token,
-        request=token_request,
-        audience=app.config["GOOGLE_CLIENT_ID"],
+        credentials.id_token, token_request, audience=app.config["GOOGLE_CLIENT_ID"]
     )
-
     session["google_id"] = id_info.get("sub")
     user = UserService.login(username=id_info.get("name"), email=id_info.get("email"))
     SessionService.set_user(user)
