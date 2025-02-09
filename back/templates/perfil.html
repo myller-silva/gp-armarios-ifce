@@ -10,6 +10,13 @@
     <p><strong>Nome:</strong> {{ user.name }}</p>
     <p><strong>Tipo:</strong> {{ user.role }}</p>
     <p><strong>Email:</strong> {{ user.email }}</p>
-    <!-- <p><strong>ID:</strong> {{ user.id }}</p> -->
 </div>
+
+
+<!-- Botão para a tela de extração de arquivos -->
+<div class="file-extraction">
+    <a href="{{ url_for('files.extract_from_file') }}" class="button-normal">Preencher perfil</a>
+</div>
+
+
 {% endblock %}

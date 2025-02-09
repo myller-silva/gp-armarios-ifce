@@ -10,6 +10,8 @@ from routes.user import user_bp
 from routes.admin import admin_bp
 from routes.student import student_bp
 from routes.errors import errors_bp
+from routes.files import files_bp
+
 
 class AppFacade:
     """Classe Façade para configurar o aplicativo Flask e inicializar os plugins"""
@@ -35,10 +37,11 @@ class AppFacade:
         """Registra todos os Blueprints"""
         self.app.register_blueprint(auth_bp)
         self.app.register_blueprint(main_bp)
+        self.app.register_blueprint(errors_bp)
         self.app.register_blueprint(user_bp, url_prefix="/user")
         self.app.register_blueprint(admin_bp, url_prefix="/admin")
         self.app.register_blueprint(student_bp, url_prefix="/student")
-        self.app.register_blueprint(errors_bp)
+        self.app.register_blueprint(files_bp, url_prefix="/files")
 
     def create_app(self):
         """Cria e retorna o aplicativo Flask"""
