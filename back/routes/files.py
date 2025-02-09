@@ -34,7 +34,7 @@ def extract_from_file():
         return jsonify({"error": "Unsupported file type"}), 400
 
     try:
-        result = processor.process_file(file)
-        return jsonify(result)
+        data = processor.process_file(file)
+        return render_template("result_json.html", data=data)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return render_template("error.html", code=500, message=str(e)), 500

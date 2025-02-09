@@ -1,3 +1,4 @@
+"""Módulo para autenticação de usuários com Google OAuth2."""
 import os
 from flask import Blueprint, session, redirect, request, current_app as app, url_for
 from google.oauth2 import id_token
