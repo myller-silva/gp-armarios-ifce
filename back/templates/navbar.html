@@ -1,0 +1,12 @@
+<!-- navbar.html -->
+<div class="navbar">
+  <!-- <h1>{% block title_navbar %}Minha Aplicação{% endblock %}</h1> -->
+  <div class="navbar-links">
+      <a href="{{ url_for('home') }}"><button class="theme-toggle-button">Dashboard</button></a>
+      <a href="{{ url_for('user.perfil')}}"><button class="theme-toggle-button">Perfil</button></a>
+      <a href="{{ url_for('auth.logout') }}"><button class="theme-toggle-button">Logout</button></a>
+  </div>
+  <div class="menu-icon" onclick="toggleMenu()">
+      &#9776; <!-- Ícone de três linhas -->
+  </div>
+</div>

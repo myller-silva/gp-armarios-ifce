@@ -1,4 +1,10 @@
 /* Table */
+.table-container {
+  max-width: 100%; /* Para garantir que a tabela ocupe a largura máxima disponível */
+  overflow-x: auto; /* Habilita o scroll horizontal caso a tabela ultrapasse a largura da tela */
+  margin: 20px 0; /* Espaçamento acima e abaixo da tabela */
+}
+
 .custom-table {
   width: 100%;
   border-collapse: collapse;
@@ -42,9 +48,18 @@
 }
 
 
+
 /* Dashboard */
 .dashboard-content {
   text-align: center;
+  display: flex;
+  
+  /* Centralizando o conteúdo */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  
   margin-top: 20px;
 }
 
@@ -69,6 +84,7 @@
 }
 
 .dashboard-button {
+  min-width: 200px;
   display: inline-block;
   padding: 10px 20px;
   text-decoration: none;
@@ -87,4 +103,12 @@
 
 .dashboard-button:active {
   transform: scale(0.95); /* Efeito de clique */
+}
+
+
+/* Responsividade para telas menores (ajustando a largura dos botões) */
+@media (max-width: 768px) {
+  .button-container {
+      width: 90%;
+  }
 }
