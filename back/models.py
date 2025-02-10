@@ -1,11 +1,8 @@
 """Modelos de dados do banco de dados"""
 
-# from app import db
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
-
-"""Entidade User"""
 
 
 class User(db.Model):
@@ -61,9 +58,6 @@ class Location(db.Model):
         }
 
 
-"""Entidade Locker"""
-
-
 class Locker(db.Model):
     """Modelo de dados para armários"""
 
@@ -87,9 +81,6 @@ class Locker(db.Model):
             "status": self.status,
             "location": self.location.to_dict() if self.location else None,
         }
-
-
-"""Entidade Reservation"""
 
 
 class Reservation(db.Model):
@@ -163,3 +154,34 @@ class Request(db.Model):
             self.request_date.strftime("%d/%m/%Y %H:%M"),
             self.status,
         ]
+
+
+class Profile(db.Model):
+    """Modelo de dados para perfis de usuários"""
+
+    __tablename__ = "profiles"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    name = db.Column(db.String(80), nullable=True)
+    cpf = db.Column(db.String(11), nullable=True)
+    phone = db.Column(db.String(15), nullable=True)
+    address = db.Column(db.String(200), nullable=True)
+    birth_date = db.Column(db.Date, nullable=True)
+
+    # Relacionamento
+    user = db.relationship("User", backref="profile", lazy=True)
+
+    def __repr__(self):
+        return f"<Profile {self.name} - {self.user.username}>"
+
+    def to_dict(self):
+        """Retorna um dicionário com os dados do perfil"""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "name": self.name,
+            "cpf": self.cpf,
+            "phone": self.phone,
+            "address": self.address,
+            "birth_date": self.birth_date,
+        }
