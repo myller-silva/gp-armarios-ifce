@@ -4,33 +4,33 @@
 {% block title_navbar %}Solicitação de Armário{% endblock %}
 
 {% block content %}
-<h2>Solicitação de Armário</h2>
-<p>Escolha a localidade onde deseja solicitar um armário. Um administrador irá avaliar sua solicitação.</p>
+<div class="locker-request-container">
+    <h2 class="title">Solicitação de Armário</h2>
+    <p class="description">
+        Escolha a localidade onde deseja solicitar um armário. Um administrador irá avaliar sua solicitação.
+    </p>
 
-<form action="{{ url_for('student.request_locker') }}" method="POST">
-    <div>
-        <label for="location_id">Selecione uma Localidade:</label>
-    </div>
-    <div>
-        <select id="location_id" name="location_id" required>
+    <form action="{{ url_for('student.request_locker') }}" method="POST" class="locker-request-form">
+        <label for="location_id" class="label">Selecione uma Localidade:</label>
+        
+        <select id="location_id" name="location_id" class="select-box" required>
             <option value="" disabled selected>Selecione uma localidade</option>
             {% for location in locations %}
                 <option value="{{ location.id }}">{{ location.name }} - {{ location.description }}</option>
             {% endfor %}
         </select>
-    </div>
-    <div>
-        <button type="submit">Solicitar Armário</button>
-    </div>
-</form>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul>
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
+        <button type="submit" class="submit-button">Solicitar Armário</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
 {% endblock %}

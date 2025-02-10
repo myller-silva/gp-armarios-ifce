@@ -1,19 +1,15 @@
-
-
-
-
 {% extends "base.html" %}
 
 {% block title %}{{ title }}{% endblock %}
-
 {% block title_navbar %}{{ title }}{% endblock %}
 
 {% block content %}
-<form action="{{ action }}" method="POST" enctype="multipart/form-data">
-    <label for="file">Escolha um arquivo:</label>
-    <input type="file" id="file" name="file" required>
-    <button type="submit">Enviar</button>
-</form>
-
-
+<div class="upload-container">
+    <h2 class="upload-title">{{ title }}</h2>
+    <form action="{{ action }}" method="POST" enctype="multipart/form-data" class="upload-form">
+        <label for="file" class="file-label">Escolha um arquivo:</label>
+        <input type="file" id="file" name="file" class="file-input" required>
+        <button type="submit" class="submit-button">Enviar</button>
+    </form>
+</div>
 {% endblock %}

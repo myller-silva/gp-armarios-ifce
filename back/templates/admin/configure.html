@@ -4,15 +4,17 @@
 {% block title_navbar %}Configuração de Banco de Dados{% endblock %}
 
 {% block content %}
-<h2>Configurar Sistema</h2>
-<form id="json-upload-form" method="POST" enctype="multipart/form-data">
-    <label for="json_file">Selecionar Arquivo JSON:</label>
-    <input type="file" name="json_file" id="json_file" required>
-    <button type="submit">Enviar</button>
-</form>
+<div class="config-container">
+    <h2 class="config-title">Configurar Sistema</h2>
+    <form id="json-upload-form" method="POST" enctype="multipart/form-data" class="config-form">
+        <label for="json_file" class="file-label">Selecionar Arquivo JSON:</label>
+        <input type="file" name="json_file" id="json_file" class="file-input" required>
+        <button type="submit" class="submit-button">Enviar</button>
+    </form>
 
-<!-- Exibir mensagens de sucesso ou erro -->
-<div id="flash-message" style="margin-top: 10px;"></div>
+    <!-- Exibir mensagens de sucesso ou erro -->
+    <div id="flash-message" class="flash-message"></div>
+</div>
 
 <script>
     document.getElementById('json-upload-form').addEventListener('submit', function (event) {
@@ -28,13 +30,14 @@
         .then(data => {
             const messageDiv = document.getElementById('flash-message');
             messageDiv.innerText = data.message;
-            messageDiv.style.color = data.status === 'success' ? 'green' : 'red';
+            messageDiv.classList.remove('error', 'success');
+            messageDiv.classList.add(data.status === 'success' ? 'success' : 'error');
         })
         .catch(error => {
             console.error("Erro:", error);
             const messageDiv = document.getElementById('flash-message');
             messageDiv.innerText = "Erro ao enviar o arquivo.";
-            messageDiv.style.color = "red";
+            messageDiv.classList.add('error');
         });
     });
 </script>

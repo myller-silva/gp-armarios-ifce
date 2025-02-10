@@ -8,38 +8,39 @@
 
 {% if requests %}
     <form action="{{ url_for('admin.locker_requests') }}" method="post">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome do Aluno</th>
-                    <th>Email</th>
-                    <th>Localidade</th>
-                    <th>Status</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for request in requests %}
-                <tr>
-                    <td>{{ request.id }}</td>
-                    <td>{{ request.user.username }}</td>
-                    <td>{{ request.user.email }}</td>
-                    <td>{{ request.location }}</td>
-                    <td>
-                        <select name="{{ request.id }}">
-                            <option value="pendente" {% if request.status == 'pendente' %}selected{% endif %}>Pendente</option>
-                            <option value="aprovado" {% if request.status == 'aprovado' %}selected{% endif %}>Aprovado</option>
-                            <option value="rejeitado" {% if request.status == 'rejeitado' %}selected{% endif %}>Rejeitado</option>
-                        </select>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="{{ url_for('admin.locker_requests') }}">
-            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-        </a>
+        <div class="table-container">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome do Aluno</th>
+                        <th>Email</th>
+                        <th>Localidade</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{ request.id }}</td>
+                        <td>{{ request.user.username }}</td>
+                        <td>{{ request.user.email }}</td>
+                        <td>{{ request.location.name }}</td>
+                        <td>
+                            <select name="{{ request.id }}" class="custom-select">
+                                <option value="pendente" {% if request.status == 'pendente' %}selected{% endif %}>Pendente</option>
+                                <option value="aprovado" {% if request.status == 'aprovado' %}selected{% endif %}>Aprovado</option>
+                                <option value="rejeitado" {% if request.status == 'rejeitado' %}selected{% endif %}>Rejeitado</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="button-container">
+            <button type="submit" class="dashboard-button">Salvar Alterações</button>
+        </div>
     </form>
 {% else %}
     <p>Não há solicitações pendentes.</p>

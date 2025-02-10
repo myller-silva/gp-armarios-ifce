@@ -17,13 +17,24 @@
             "description": "Bloco da Mecânica",
             "lockers": [
                 { "number": 201, "status": "livre" },
-                { "number": 202, "status": "livre" }
+                { "number": 202, "status": "livre" },
+                { "number": 203, "status": "livre" },
+                { "number": 204, "status": "livre" },
+                { "number": 205, "status": "livre" },
+                { "number": 206, "status": "livre" }
             ]
         },
         {
             "name": "Bloco 3",
             "description": "Bloco da Computação",
-            "capacity": 50
+            "lockers": [
+                { "number": 301, "status": "livre" },
+                { "number": 302, "status": "livre" },
+                { "number": 303, "status": "livre" },
+                { "number": 304, "status": "livre" },
+                { "number": 305, "status": "livre" },
+                { "number": 306, "status": "livre" }
+            ]
         }
     ]
 }
