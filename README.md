@@ -1,6 +1,7 @@
 # 📦 GP-Armários IFCE
 
 Sistema web desenvolvido com Flask como parte da disciplina de Gestão de Projetos no Instituto Federal do Ceará (IFCE). 
+
 O objetivo do projeto é simplificar a gestão e o controle do uso dos armários disponibilizados para os estudantes da instituição.
 
 ## 🚀 Tecnologias Utilizadas
