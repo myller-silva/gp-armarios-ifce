@@ -26,7 +26,6 @@ gp-armarios-ifce/
 │   │   ├── templates/      # Templates HTML com Jinja2
 │   │   └── static/         # Arquivos estáticos (CSS, JS, imagens)
 │   ├── config.py           # Configurações da aplicação
-│   ├── wsgi.py             # Ponto de entrada WSGI
 │   ├── requirements.txt    # Dependências do projeto
 ├── docker-compose.yml      # Configuração do Docker Compose
 └── README.md
