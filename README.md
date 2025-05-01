@@ -70,6 +70,3 @@ flask run
 
 A aplicação estará disponível em `http://localhost:5000`.
 
-## 📫 Contato
-
-Em caso de dúvidas ou sugestões, entre em contato pelo e-mail: **myller.silva@example.com**
