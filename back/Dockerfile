@@ -19,5 +19,12 @@ ENV FLASK_APP=app.py
 # Exponha a porta em que o Flask será executado
 EXPOSE 5000
 
-# Comando para iniciar o aplicativo Flask
+# Copie o entrypoint.sh para o contêiner e torne-o executável
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Defina o ENTRYPOINT para o script de inicialização
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Comando padrão (se o ENTRYPOINT terminar com sucesso, esse comando é executado)
 CMD ["flask", "run", "--host=0.0.0.0"]
