@@ -19,3 +19,4 @@ class Config:
     GOOGLE_DISCOVERY_URL = (
         "https://accounts.google.com/.well-known/openid-configuration"
     )
+    GOOGLE_OAUTH_SECRETS = os.getenv("GOOGLE_OAUTH_SECRETS")
