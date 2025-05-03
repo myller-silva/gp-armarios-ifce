@@ -1,5 +1,6 @@
 """Módulo para autenticação de usuários com Google OAuth2."""
 import os
+import json
 from flask import Blueprint, session, redirect, request, current_app as app, url_for
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
@@ -15,8 +16,9 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 def create_flow():
     """Cria um fluxo OAuth com as configurações necessárias."""
-    return Flow.from_client_secrets_file(
-        client_secrets_file=app.config["CLIENT_SECRETS_FILE"],
+    client_config = json.loads(os.environ["GOOGLE_OAUTH_SECRETS"])
+    return Flow.from_client_config(
+        client_config=client_config,
         scopes=[
             "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/userinfo.email",
