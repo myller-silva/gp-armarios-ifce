@@ -22,7 +22,9 @@ class AppFacade:
 
     def configure_app(self):
         """Configura as variáveis de ambiente da aplicação"""
-        self.app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sigmar.db"
+        self.app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+            "DATABASE_URL", "sqlite:///sigmar.db"
+        )
         self.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
         self.app.secret_key = os.environ.get("SECRET_KEY")
         self.app.config["GOOGLE_CLIENT_ID"] = os.environ.get("GOOGLE_CLIENT_ID")
@@ -48,4 +50,9 @@ class AppFacade:
         self.configure_app()
         self.initialize_plugins()
         self.register_blueprints()
+
+        # Garantir que as tabelas do banco sejam criadas
+        with self.app.app_context():
+            db.create_all()
+
         return self.app
